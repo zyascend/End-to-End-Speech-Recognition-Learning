@@ -1,2 +1,3 @@
 # End-to-End-Speech-Recognition-Learning
-ASR, End-to-End, end2end, Speech Recognition, 端到端语音识别
+记录端到端语音识别相关论文笔记及资料
+
