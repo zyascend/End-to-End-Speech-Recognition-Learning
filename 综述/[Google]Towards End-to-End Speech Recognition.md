@@ -16,9 +16,7 @@ ISCSLP Tutorial 4 Nov. 26, 2018
 
 **直接**意味着它极大地简化了传统语音识别系统的结构。
 
-![image-20200929101147667](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200929101147667.png)
-
-
+[![0ZIFde.md.png](https://s1.ax1x.com/2020/09/29/0ZIFde.md.png)](https://imgchr.com/i/0ZIFde)
 
 ## End-to-End ASR的发展历程
 
@@ -45,6 +43,121 @@ CTC的不足：
 Listen，Attend and Spell [Chan et al., 2015]
 
 Attention-Based Models for Speech Recognition [Chorowski et al., 2015]
+
+#### 模型结构
+
+[![0ZIYzq.md.png](https://s1.ax1x.com/2020/09/29/0ZIYzq.md.png)](https://imgchr.com/i/0ZIYzq)
+
+- Encoder: 类似于声学模型:, 将输入的语音转换成更高层次的表示
+- Attention：计算解码器和编码器每一帧之间的相似度分数，并将计算结果输给decoder
+- Decoder：类似与语言模型，接受Attention的输出与前一个时间步的输出，计算当前时间步token的概率分布
+
+### Online Models——RNN-T, NT, MoChAs
+
+经过实验表明，Attention-based mode相比与其他模型表现地最好，但是它并不适用于流式语音识别
+
+> As typically used in sequence-to-sequence transduction tasks, Transformer-based models attend over encoder features using decoder features, implying that the decoding has to be done in a label-synchronous way, thereby posing a challenge for streaming speech recognition applications.
+>
+> arXiv:2002.02562 [cs, eess]
+
+另一方面，[Battenberg et al., 2017] 的实验证明，没有使用LM的RNN-T要比使用了LM的CTC表现更优。
+
+#### 模型结合
+
+- CTC与Attention-based models结合：[Kim et al., 2017]  https://arxiv.org/abs/1609.06773
+- RNN-T可以与具有以下能力的Attention-based models结合
+  - 以声学的角度调节语言模型 [Prabhavalkar et al., 2017] https://www.isca-speech.org/archive/Interspeech_2017/pdfs/0233.PDF
+  - 可以用于使decoder偏向向特定感兴趣的方向解码 [He et al., 2017] https://arxiv.org/abs/1710.09617
+- Attention-based models可以与另一个Attention-based models结合，达到使decoder偏向向特定感兴趣的方向解码 https://arxiv.org/abs/1808.02480
+
+## 进一步改进
+
+### 针对模型结构
+
+#### 1. 使用词块作为建模单元
+
+有哪些优势：
+
+- 相比于字单元的LM，词单元的LM更具稳定性（？）
+- 使用词级别建模可以使LM解码更加强大
+- 使用更长的单元建模可以提高解码器LSTM记忆的有效性
+- 使模型更有可能记住常用词的发音形状
+- 更长的建模单元减小decode的步数，有效提升模型表现
+
+#### 2. Multi-headed Attention
+
+每个Head贡献不同的attention权重
+
+### 针对优化方法
+
+#### Minimum Word Error Rate (MWER)
+
+传统Attention-based Sequence-to-Sequence model使用cross-entropy作为损失函数，不是直接对WER指标进行优化，而真正的目标是直接或间接地最小化WER  => MWER Training
+
+- 使用样本估值--> [Optimizing expected word error rate via sampling for speech recognition]
+- 使用N-best list估值-->[Explicit  word  error  minimization  in  N-best  list  rescoring] 
+
+使用MWER的优化方法：
+
+- WER降低8%-20%
+- 需解码出N个最好的预测值--> computationally expensive
+
+#### 计划采样(Scheduled Sampling)
+
+decoder时随机使用模型真实label来作为下一个时刻的输入，而不是使用上一时间步的预测输出，因为此输出可能是错误的，其生成的下一个值也是不可信的。
+
+[Scheduled Sampling for Sequence Prediction with Recurrent Neural Networks] https://arxiv.org/abs/1506.03099
+
+- 避免错误累积（Exposure Bias）
+
+- 帮助减少训练时与真实使用环境之间的表现差异
+
+#### Asynchronous and Synchronous Training
+
+- [ ] TODO
+
+#### Label Smoothing
+
+- 减小过拟合
+- 预测时增加熵值，使模型更具可适性
+
+## 额外的语言模型
+
+### 为什么需要LM？
+
+- 声音-文字这种成对的数据少，用于训练LM的text-only类的数据多
+- 一些发音导致的问题可以使用语言模型来修正
+- LM可以很好的融合到LAS中
+
+More details：
+
+ [An analysis of incorporating an external language model into a sequence-to-sequence model]
+
+ https://arxiv.org/abs/1712.01996 
+
+### 用LM扩展LAS
+
+怎样融合？
+
+- Shallow fusion：AM 和 LM 分开各自训练，然后在 beam-search 时做得分的加权 [相关论文](https://cs.corp.google.com/piper///depot/google3/experimental/users/anjuli/papers/icassp2018/lm/main.pdf)
+- Deep fusion：AM 与 LM 各自训练后，添加 FineTune 层进行隐层融合 [相关论文](https://arxiv.org/pdf/1503.03535.pdf)
+- Cold fusion：LM 仍然是预训练得到的，而 AM 则在 LM 的帮助下从零开始训练 [相关论文](https://arxiv.org/pdf/1708.06426.pdf)
+
+融合结果表现对比：
+
+![0mAInP.png](https://s1.ax1x.com/2020/09/29/0mAInP.png)
+
+## Online Models
+
+LAS无法做到实时识别
+
+### RNN-T
+
+
+
+
+
+
 
 
 
