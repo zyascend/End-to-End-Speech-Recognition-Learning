@@ -1,3 +1,7 @@
+
+
+
+
 # [Google]Towards End-to-End Speech Recognition
 
 Google关于端到端语音识别的综述
@@ -152,6 +156,48 @@ More details：
 LAS无法做到实时识别
 
 ### RNN-T
+
+- RNN-T架构里的CTC-AM与RNN-LM可以分别训练
+- 一般来说，RNN-T比单独使用CTC的表现更好
+
+RNN-T components作为LOSS可以单独初始化 => 可以提高表现
+
+[![0mo74g.png](https://s1.ax1x.com/2020/09/30/0mo74g.png)](https://imgchr.com/i/0mo74g)
+
+
+
+为了进一步提升RNN-T的表现，使用word pieces作为输出单元
+
+- 使用字（graphemes ）单元 => 限制LM的上下文
+- 使用词（word）单元 => OOVs
+
+使用基于两者之间的词块（word pieces）建模
+
+其他改进：
+
+> - Recurrent projection layer
+>   - Introduced after each LSTM layer in both the encoder and decoder.
+>   - Improves accuracy with more compact representation.
+> - Layer normalization
+>   - Applied to all layers.
+>   - Stabilizes hidden state dynamics of the recurrent layers.
+>   - Improves accuracy
+> - Native TF support for efficient batched forward-backward computation
+
+ 
+
+- - [ ] 时间缩减层(Time Reduction Layer)
+
+- 预测网络状态缓存 => 减小计算量
+- Encoder / prediction network 多线程
+  - Encoder分割为两个线程：before and after time-reduction layer
+  - 预测网络运行与单个线程
+  - 多个线程之间通过管道异步交互
+- - [ ] 参数量化(Parameter Quantization)
+
+### NT (Neural Transducer)
+
+
 
 
 
