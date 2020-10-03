@@ -195,15 +195,40 @@ RNN-T components作为LOSS可以单独初始化 => 可以提高表现
   - 多个线程之间通过管道异步交互
 - - [ ] 参数量化(Parameter Quantization)
 
-### NT (Neural Transducer)
+### NT (Neural Transducer) & MoChA
 
+- [ ] 具体原理待补充
 
+[![01gnZ6.png](https://s1.ax1x.com/2020/10/03/01gnZ6.png)](https://imgchr.com/i/01gnZ6)
 
+### 基于用户体验优化
 
+#### 个性化
 
+**根据个人信息对语音模型的优先级进行 "偏置"**  --> **提高WER**
 
+##### 如何"偏置" ？—— CLAS
 
+https://arxiv.org/abs/1808.02480 《Deep context: end-to-end contextual speech recognition》
 
+- CLAS在偏置方面比额外的LM更好
+- CLAS model + external LM 表现最好
 
+#### 准确判读语音的结束
 
+难点：
+
+- 太早触发结束，影响WER
+- 太晚触发结束，影响实时性
+
+解决：
+
+**VAD vs EOQ**
+
+#### Multi-Dialect ASR
+
+相关论文：
+
+- S. Watanabe, T. Hori, J.R. Hershey; **Language independent end-to-end architecture for joint language identification and speech recognition**; ASRU 2017. MERL, USA
+- S. Kim, M.L. Seltzer; **Towards language-universal end-to-end speech recognition**; submitted to ICASSP 2018. Microsoft, USA
 
