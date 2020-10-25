@@ -11,3 +11,4 @@
 Models to Sequence-to-Sequence Speech Recognition》](https://github.com/zyascend/End-to-End-Speech-Recognition-Learning/blob/master/Papers/Learn%20Spelling%20from%20Teachers.md)
 - [《ContextNet: Improving Convolutional Neural Networks for Automatic Speech
 Recognition with Global Context》](https://github.com/zyascend/End-to-End-Speech-Recognition-Learning/blob/master/Papers/ContextNet.md)
+- [《Leveraging Unpaired Text Data for Training End-to-End Speech-to-Intent Systems》](https://github.com/zyascend/End-to-End-Speech-Recognition-Learning/blob/master/Papers/Leveraging%20Unpaired%20Text%20Data%20for%20Training%20End-to-End%20Speech-to-Intent%20Systems.md)
